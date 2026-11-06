@@ -2,6 +2,9 @@
 
 **English** · [Tiếng Việt](README.vi.md)
 
+![Demo of Zalo Exporter running in a terminal](docs/demo.gif)
+*Demo with simulated data: made-up group names, not a real chat.*
+
 Saves the messages of the Zalo groups you choose on **your own computer**, from the **Zalo PC app** or from **Zalo Web**, so you can see which questions come up most often and build reports. Works on **Windows and Mac**. **Nothing to install.**
 
 ## Start

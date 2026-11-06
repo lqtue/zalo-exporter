@@ -2,6 +2,9 @@
 
 [English](README.md) · **Tiếng Việt**
 
+![Demo Zalo Exporter chạy trong cửa sổ lệnh](docs/demo.gif)
+*Demo với dữ liệu giả lập: tên nhóm là bịa, không phải cuộc trò chuyện thật.*
+
 Lưu tin nhắn của các nhóm Zalo bạn chọn vào **chính máy tính của bạn**, từ **Zalo trên máy tính** hoặc từ **Zalo Web**, để bạn thấy những câu hỏi nào xuất hiện nhiều nhất và làm báo cáo. Chạy được trên **Windows và Mac**. **Không cần cài đặt gì.**
 
 ## Bắt đầu
