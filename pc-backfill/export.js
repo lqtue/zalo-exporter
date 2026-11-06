@@ -29,6 +29,10 @@ const TEXT = {
   en: {
     welcome: "Zalo Exporter saves the messages of your chosen Zalo groups on this computer,\nso you can see which questions come up most often.",
     askLang: "Language / Ngôn ngữ:  1 = English   2 = Tiếng Việt   [1]: ",
+    askAnon: "Hide real names? The saved files will show codes (C..., U...) instead of group and people names.\n  1 = Yes, hide names (recommended)    2 = No, keep real names  [1]: ",
+    namesHidden: "names: hidden (codes)", namesReal: "names: REAL (keep the files private)",
+    settingsMenu: "Change settings (language, group names, hide names)", settingsTitle: "Settings (press Enter to keep the current value)",
+    keepHint: (v) => `[${v}]`, settingsSaved: "Settings saved.",
     askKeywords: "Which groups? Type part of their name (accents and capitals don't matter),\nfor example: lop ve    Several names: separate them with commas.",
     keywordsPrompt: "Group name: ",
     noKeyword: "No name was given. Run the tool again and type part of a group name.",
@@ -39,12 +43,13 @@ const TEXT = {
       3: "Read ALL history again from the PC app        (once, after the phone sync has finished)",
       4: "Read ALL available messages again from Zalo Web",
       5: "Check that the tool can see Zalo              (nothing is exported)",
+      6: "Change settings (language, group names, hide names)",
     },
     choicePrompt: (d) => `Type a number and press Enter [${d}]: `,
     badChoice: "Please type one of the numbers above.",
     srcApp: "Zalo PC app", srcWeb: "Zalo Web",
     modeCheck: "check only", modeAll: "all available history", modeNew: "new messages since the last run",
-    plan: (src, kw, mode) => `Source: ${src}  |  Groups containing: ${kw}  |  ${mode}`,
+    plan: (src, kw, mode, names) => `Source: ${src}  |  Groups containing: ${kw}  |  ${mode}  |  ${names}`,
     confirmApp: "Zalo will be CLOSED and reopened by this tool. Please don't use Zalo until it finishes.\nThis can take from a few minutes to a few hours.\nPress Enter to start (or close this window to cancel). ",
     confirmWeb: "A separate browser window with Zalo Web will open.\nFirst time: scan the QR code with the Zalo app on your phone. Please don't use that window until it finishes.\nPress Enter to start (or close this window to cancel). ",
     restarting: "Restarting Zalo in export mode", openingWeb: "Opening Zalo Web", waiting: "Waiting for the chat list",
@@ -67,6 +72,10 @@ const TEXT = {
   vi: {
     welcome: "Zalo Exporter lưu tin nhắn của các nhóm Zalo bạn chọn vào máy tính này,\nđể bạn thấy những câu hỏi nào xuất hiện nhiều nhất.",
     askLang: "Language / Ngôn ngữ:  1 = English   2 = Tiếng Việt   [1]: ",
+    askAnon: "Ẩn tên thật? Tệp lưu sẽ hiện mã (C..., U...) thay cho tên nhóm và tên người.\n  1 = Có, ẩn tên (nên chọn)    2 = Không, giữ tên thật  [1]: ",
+    namesHidden: "tên: đã ẩn (dùng mã)", namesReal: "tên: TÊN THẬT (hãy giữ tệp riêng tư)",
+    settingsMenu: "Đổi cài đặt (ngôn ngữ, tên nhóm, ẩn tên)", settingsTitle: "Cài đặt (bấm Enter để giữ giá trị hiện tại)",
+    keepHint: (v) => `[${v}]`, settingsSaved: "Đã lưu cài đặt.",
     askKeywords: "Bạn muốn lấy những nhóm nào? Gõ một phần tên nhóm (có dấu hay không, viết hoa hay thường đều được),\nví dụ: lop ve    Nhiều tên: ngăn cách bằng dấu phẩy.",
     keywordsPrompt: "Tên nhóm: ",
     noKeyword: "Bạn chưa nhập tên. Hãy chạy lại công cụ và gõ một phần tên nhóm.",
@@ -77,12 +86,13 @@ const TEXT = {
       3: "Đọc lại TOÀN BỘ lịch sử từ Zalo trên máy tính  (một lần, sau khi điện thoại đồng bộ xong)",
       4: "Đọc lại toàn bộ tin nhắn có sẵn từ Zalo Web",
       5: "Kiểm tra công cụ có thấy Zalo không            (không xuất dữ liệu)",
+      6: "Đổi cài đặt (ngôn ngữ, tên nhóm, ẩn tên)",
     },
     choicePrompt: (d) => `Gõ một số rồi bấm Enter [${d}]: `,
     badChoice: "Vui lòng gõ một trong các số ở trên.",
     srcApp: "Zalo trên máy tính", srcWeb: "Zalo Web",
     modeCheck: "chỉ kiểm tra", modeAll: "toàn bộ lịch sử có sẵn", modeNew: "tin nhắn mới từ lần chạy trước",
-    plan: (src, kw, mode) => `Nguồn: ${src}  |  Nhóm có chứa: ${kw}  |  ${mode}`,
+    plan: (src, kw, mode, names) => `Nguồn: ${src}  |  Nhóm có chứa: ${kw}  |  ${mode}  |  ${names}`,
     confirmApp: "Công cụ sẽ TẮT Zalo rồi mở lại. Vui lòng không dùng Zalo cho đến khi xong.\nViệc này có thể mất từ vài phút đến vài giờ.\nBấm Enter để bắt đầu (hoặc đóng cửa sổ này để hủy). ",
     confirmWeb: "Một cửa sổ trình duyệt riêng với Zalo Web sẽ mở ra.\nLần đầu: quét mã QR bằng ứng dụng Zalo trên điện thoại. Vui lòng không dùng cửa sổ đó cho đến khi xong.\nBấm Enter để bắt đầu (hoặc đóng cửa sổ này để hủy). ",
     restarting: "Đang khởi động lại Zalo ở chế độ xuất", openingWeb: "Đang mở Zalo Web", waiting: "Đang chờ danh sách trò chuyện",
@@ -134,11 +144,11 @@ function loadSettings() {
 const saveSettings = (s) => fs.writeFileSync(SETTINGS_FILE, JSON.stringify(s, null, 2));
 
 // merge one export into dir/archive.json: per chat code, messages unique by id, sorted by time
-function mergeArchive(dir, out, names) {
+function mergeArchive(dir, out, names, fileName = "archive.json") {
   fs.mkdirSync(dir, { recursive: true });
-  const file = path.join(dir, "archive.json");
+  const file = path.join(dir, fileName);
   const arch = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, "utf8")) : { chats: {} };
-  if (fs.existsSync(file)) fs.copyFileSync(file, path.join(dir, "archive.prev.json")); // one step of undo
+  if (fs.existsSync(file)) fs.copyFileSync(file, file.replace(/\.json$/, ".prev.json")); // one step of undo
   const key = (m) => m.id || `${m.time}|${m.uid}|${m.text}`;
   let added = 0;
   for (const c of out) {
@@ -255,17 +265,33 @@ async function waitReady(port, minutes, hint) { // true once the chat list is on
 }
 
 // ---------- menu ----------
+async function editSettings(settings) {
+  console.log(`\n${bold(TX.settingsTitle)}\n`);
+  const lang = await ask(`Language / Ngôn ngữ: 1 = English, 2 = Tiếng Việt ${TX.keepHint(settings.lang === "vi" ? 2 : 1)}: `);
+  if (lang === "1" || lang === "2") settings.lang = lang === "2" ? "vi" : "en";
+  TX = TEXT[settings.lang] || TEXT.en;
+  const kw = await ask(`${TX.keywordsPrompt}${TX.keepHint((settings.keywords || []).join(", "))}: `);
+  if (kw) settings.keywords = kw.split(",").map((x) => x.trim()).filter(Boolean);
+  const an = await ask(`${TX.askAnon.replace(/\[1\]: $/, "")}${TX.keepHint(settings.anonymize === false ? 2 : 1)}: `);
+  if (an === "1" || an === "2") settings.anonymize = an === "1";
+  saveSettings(settings);
+  console.log(green(TX.settingsSaved));
+}
 const MENU = { 1: { source: "app", full: false }, 2: { source: "web", full: false }, 3: { source: "app", full: true }, 4: { source: "web", full: true }, 5: { probe: true } };
 async function chooseMode(settings) {
   let source = opt("source", null), full = flag("full"), probe = flag("probe");
   if (!source && !full && !probe && !flag("yes")) {
-    const def = settings.lastChoice || "1";
-    console.log(`\n${bold(TX.menuTitle)}\n`);
-    for (const n of Object.keys(TX.menu)) console.log(`  ${bold(n)}  ${TX.menu[n]}`);
-    const pick = (await ask(`\n${TX.choicePrompt(def)}`)) || def;
-    if (!MENU[pick]) { console.error(yellow(TX.badChoice)); process.exit(1); }
-    settings.lastChoice = pick;
-    ({ source = settings.source, full = false, probe = false } = MENU[pick]);
+    for (;;) {
+      const def = settings.lastChoice && settings.lastChoice !== "6" ? settings.lastChoice : "1";
+      console.log(`\n${bold(TX.menuTitle)}\n`);
+      for (const n of Object.keys(TX.menu)) console.log(`  ${bold(n)}  ${TX.menu[n]}`);
+      const pick = (await ask(`\n${TX.choicePrompt(def)}`)) || def;
+      if (pick === "6") { await editSettings(settings); continue; }
+      if (!MENU[pick]) { console.error(yellow(TX.badChoice)); process.exit(1); }
+      settings.lastChoice = pick;
+      ({ source = settings.source, full = false, probe = false } = MENU[pick]);
+      break;
+    }
   }
   source = source || settings.source || "app";
   if (!["app", "web"].includes(source)) { console.error('--source must be "app" or "web"'); process.exit(1); }
@@ -286,13 +312,19 @@ async function main() {
     settings.keywords = (await ask(TX.keywordsPrompt)).split(",").map((s) => s.trim()).filter(Boolean);
     if (!settings.keywords.length) { console.error(yellow(TX.noKeyword)); process.exit(1); }
   }
+  if (flag("anon")) settings.anonymize = true;
+  if (flag("no-anon")) settings.anonymize = false;
+  if (settings.anonymize === undefined) settings.anonymize = flag("yes") ? true : (await ask(TX.askAnon)) !== "2";
+  const anon = settings.anonymize !== false;
   if (!settings.salt) settings.salt = crypto.randomBytes(6).toString("hex"); // secret behind the anonymous codes; keep settings.json
   const mode = await chooseMode(settings);
   const { source, probe } = mode;
-  const st = (settings.state[source] = settings.state[source] || { chats: {} });
+  const stateKey = anon ? source : `${source}-real`; // anonymised and real-name archives never mix, so each keeps its own "last run" memory
+  const st = (settings.state[stateKey] = settings.state[stateKey] || { chats: {} });
+  const archiveFile = anon ? "archive.json" : "archive_real-names.json";
   const full = mode.full || !Object.keys(st.chats || {}).length; // each source starts with everything it can see
   const port = Number(opt("port", source === "app" ? "9222" : "9223"));
-  console.log(`\n${dim(TX.plan(source === "app" ? TX.srcApp : TX.srcWeb, settings.keywords.join(", "), probe ? TX.modeCheck : full ? TX.modeAll : TX.modeNew))}\n`);
+  console.log(`\n${dim(TX.plan(source === "app" ? TX.srcApp : TX.srcWeb, settings.keywords.join(", "), probe ? TX.modeCheck : full ? TX.modeAll : TX.modeNew, anon ? TX.namesHidden : TX.namesReal))}\n`);
 
   const scriptPath = ["../extension/content.js", "./content.js"].map((p) => path.resolve(__dirname, p)).find(fs.existsSync);
   if (!scriptPath) throw new Error("content.js not found");
@@ -325,7 +357,7 @@ async function main() {
     if (!(await waitReady(port, 10, source === "app" ? TX.hintApp : TX.hintWeb))) throw new Error(TX.timeout);
     const c = await connect(port);
     await c.evaluate(fs.readFileSync(scriptPath, "utf8"));
-    const cfg = { groups: settings.keywords, anon: true, salt: settings.salt, returnOnly: true, lang: settings.lang, since: full ? {} : st.chats };
+    const cfg = { groups: settings.keywords, anon, salt: settings.salt, returnOnly: true, lang: settings.lang, since: full ? {} : st.chats };
 
     if (probe) {
       await c.evaluate(`window.__zaloExporterApi.probe(${JSON.stringify(cfg)}).then(() => 1)`, true);
@@ -341,12 +373,12 @@ async function main() {
     if (!json || json === "undefined") { console.error(`${yellow(TX.nothing)}\n${report}`); return; }
     if (flag("verbose")) console.log(report);
     const { out, names, keys, skipped } = JSON.parse(json);
-    const r = mergeArchive(ARCHIVE_DIR, out, names);
+    const r = mergeArchive(ARCHIVE_DIR, out, names, archiveFile);
     st.chats = st.chats || {};
     for (const [k, ts] of Object.entries(keys || {})) st.chats[k] = Math.max(st.chats[k] || 0, ts);
     st.lastRun = new Date().toISOString();
     saveSettings(settings);
-    console.log(`\n${green(TX.finish(out.length, r.added, r.total, r.chats))}\n  ${TX.file}${path.join(ARCHIVE_DIR, "archive.json")}`);
+    console.log(`\n${green(TX.finish(out.length, r.added, r.total, r.chats))}\n  ${TX.file}${path.join(ARCHIVE_DIR, archiveFile)}`);
     if (skipped && skipped.length) console.log(`\n${yellow(TX.skippedTip(skipped.length))}`);
   } finally {
     stopBrowser(browser);

@@ -11,7 +11,7 @@ Lưu tin nhắn của các nhóm Zalo bạn chọn vào **chính máy tính củ
 | Windows | `Export.bat` |
 | Mac | `Export.command` (lần đầu: bấm chuột phải → Open) |
 
-Một cửa sổ sẽ hỏi vài điều **một lần duy nhất** (ngôn ngữ, một phần tên nhóm) rồi hiện menu:
+Một cửa sổ sẽ hỏi vài điều **một lần duy nhất** (ngôn ngữ, một phần tên nhóm, có ẩn tên thật hay không) rồi hiện menu:
 
 ```
 1  Lấy tin nhắn MỚI từ Zalo trên máy tính         (lần đầu: lấy tất cả những gì có)
@@ -19,6 +19,7 @@ Một cửa sổ sẽ hỏi vài điều **một lần duy nhất** (ngôn ngữ
 3  Đọc lại TOÀN BỘ lịch sử từ Zalo trên máy tính   (một lần, sau khi điện thoại đồng bộ xong)
 4  Đọc lại toàn bộ tin nhắn có sẵn từ Zalo Web
 5  Kiểm tra công cụ có thấy Zalo không             (không xuất dữ liệu)
+6  Đổi cài đặt (ngôn ngữ, tên nhóm, ẩn tên)
 ```
 
 Bấm Enter để lặp lại lựa chọn lần trước. Khi chạy, một dòng hiển thị tiến độ, và mỗi nhóm đọc xong sẽ có một dòng ✓. Cuối cùng có bản tóm tắt và vị trí của tệp kết quả.
@@ -37,14 +38,16 @@ Chạy lại và bấm Enter. Công cụ chỉ đọc tin nhắn **mới** (vài
 
 | Tệp | Nội dung |
 |---|---|
-| `archive/archive.json` | Toàn bộ tin nhắn, chia theo nhóm, không trùng. |
+| `archive/archive.json` | Toàn bộ tin nhắn, chia theo nhóm, không trùng. Tên là mã (khi bật "ẩn tên"). |
+| `archive/archive_real-names.json` | Giống trên nhưng có tên thật (chỉ khi tắt "ẩn tên"). Để riêng để hai loại không bị lẫn. |
 | `archive/names_PRIVATE.json` | Tên thật ứng với các mã ẩn danh. **Chỉ giữ trên máy này. Không gửi đi.** |
 | `settings.json` | Ngôn ngữ, tên nhóm và khóa bí mật tạo ra các mã. **Không xóa**, nếu không các mã sẽ bị đổi. |
 | `web-profile/` | Phiên đăng nhập Zalo Web đã lưu (chỉ khi dùng Zalo Web). Giữ riêng tư. |
 
 ## Quyền riêng tư và rủi ro
 
-- Tên phụ huynh và học sinh được thay bằng mã (`C…` cho nhóm, `U…` cho người). Tên viết **trong nội dung** tin nhắn (tên gọi, biệt danh) **không** bị che. Hãy coi mọi tệp là dữ liệu nhạy cảm và xin phép phụ huynh trước khi phân tích tin nhắn của họ.
+- **Ẩn tên là tùy chọn** (mục 6 trong menu). Khi bật, tên nhóm và tên người được thay bằng mã (`C…` cho nhóm, `U…` cho người). Khi tắt, tên thật được lưu: hãy giữ tệp riêng tư. Đổi chế độ sẽ tạo một kho lưu trữ riêng; kho còn lại không bị thay đổi.
+- Kể cả khi đã ẩn tên, tên viết **trong nội dung** tin nhắn (tên gọi, biệt danh) **không** bị che. Hãy coi mọi tệp là dữ liệu nhạy cảm và xin phép phụ huynh trước khi phân tích tin nhắn của họ.
 - Công cụ đọc màn hình Zalo giống như một người dùng. Đây là công cụ không chính thức; Zalo có thể thay đổi ứng dụng làm công cụ ngừng hoạt động, và việc dùng tự động hóa có thể không phù hợp với điều khoản của Zalo. Hãy tự chịu rủi ro khi sử dụng.
 - Ở chế độ Zalo trên máy tính, Zalo mở một "cổng gỡ lỗi" trên máy trong lúc công cụ chạy, cho phép chương trình khác trên máy này điều khiển nó. Vì vậy Zalo được mở lại bình thường khi xong.
 
