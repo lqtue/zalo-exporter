@@ -1,0 +1,13 @@
+# PRIVATE DATA: never commit (exports of real chats, the secret behind the anonymous codes, the saved Zalo login)
+backfill/
+archive/
+web-profile/
+settings.json
+*.prev.json
+names_PRIVATE*.json
+zalo_export*
+
+# build output, downloaded binaries, OS noise
+dist/
+.cache/
+.DS_Store

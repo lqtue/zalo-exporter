@@ -1,0 +1,9 @@
+{
+  "manifest_version": 3,
+  "name": "Zalo Chat Exporter",
+  "version": "0.1.0",
+  "description": "Export messages from selected Zalo Web groups to JSON/TXT on this computer.",
+  "permissions": ["activeTab"],
+  "content_scripts": [{ "matches": ["https://chat.zalo.me/*"], "js": ["content.js"], "run_at": "document_idle" }],
+  "action": { "default_popup": "popup.html", "default_title": "Zalo Chat Exporter" }
+}

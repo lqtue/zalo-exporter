@@ -1,0 +1,21 @@
+<!doctype html>
+<meta charset="utf-8">
+<style>
+  body { width: 320px; font: 13px system-ui, sans-serif; margin: 12px; }
+  textarea { width: 100%; height: 70px; box-sizing: border-box; }
+  button { margin: 6px 6px 0 0; padding: 6px 12px; }
+  label { display: block; margin-top: 6px; }
+  small { color: #666; }
+</style>
+<b>Zalo Chat Exporter</b>
+<label>Group names contain (one per line, empty = ALL chats)
+  <textarea id="groups">lop ve</textarea></label>
+<label><input type="checkbox" id="anon" checked> Anonymise chat and sender names (saves a private name map)</label>
+<label>Secret code word (keep the same every run; also used by the PC runner)
+  <input id="salt" style="width:100%;box-sizing:border-box"></label>
+<label>Date range (optional; empty = all history)<br>
+  from <input type="date" id="from"> to <input type="date" id="to"></label>
+<button id="probe">1. Test selectors</button>
+<button id="run">2. Export</button>
+<br><small>Open chat.zalo.me, log in, open any chat first. Progress shows on the page, bottom-right.</small>
+<script src="popup.js"></script>
