@@ -5,6 +5,10 @@
 ![Demo Zalo Exporter chạy trong cửa sổ lệnh](docs/demo.gif)
 *Demo với dữ liệu giả lập: tên nhóm là bịa, không phải cuộc trò chuyện thật.*
 
+[![Tải bản cho Windows](https://img.shields.io/badge/T%E1%BA%A3i%20v%E1%BB%81-Windows-0078D6?style=for-the-badge)](https://github.com/lqtue/zalo-exporter/releases/latest/download/ZaloExporter-windows.zip) [![Tải bản cho Mac](https://img.shields.io/badge/T%E1%BA%A3i%20v%E1%BB%81-Mac-555555?style=for-the-badge)](https://github.com/lqtue/zalo-exporter/releases/latest/download/ZaloExporter-mac.zip)
+
+Windows 10/11 · Mac (chip Apple hoặc Intel). Giải nén rồi bấm đúp `Export.bat` (Windows) hoặc `Export.command` (Mac).
+
 Lưu tin nhắn của các nhóm Zalo bạn chọn vào **chính máy tính của bạn**, từ **Zalo trên máy tính** hoặc từ **Zalo Web**, để bạn thấy những câu hỏi nào xuất hiện nhiều nhất và làm báo cáo. Chạy được trên **Windows và Mac**. **Không cần cài đặt gì.**
 
 ## Bắt đầu
